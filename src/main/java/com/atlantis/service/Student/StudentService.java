@@ -37,7 +37,7 @@ public class StudentService {
     }
     public List<Student> getExampleStudent(){
         return List.of(
-                new Student("180290050","Ilker","Atik",4,"290","180")
+                new Student("180290050","Ilker","Atik",4)
         );
     }
 

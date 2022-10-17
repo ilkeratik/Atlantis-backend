@@ -1,12 +1,15 @@
 package com.atlantis.model.University;
 
+import com.atlantis.model.Student.Student;
+import com.atlantis.model.Teacher.Teacher;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -15,5 +18,14 @@ public class Department {
     @Id
     @NonNull private String departmentId;
     @NonNull private String departmentName;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "department")
+    private List<Student> studentList;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "department")
+    private List<Teacher> teacherList;
 
 }

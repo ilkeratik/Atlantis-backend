@@ -3,6 +3,9 @@ package com.atlantis.model.Student;
 import com.atlantis.model.University.Department;
 import com.atlantis.model.University.Faculty;
 import com.atlantis.model.University.Lesson;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
@@ -16,8 +19,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
@@ -39,17 +42,21 @@ public class Student implements Serializable {
     @NonNull private String surname;
     @NonNull private Integer grade;
 
-    @NonNull private String facultyId;
-    @NonNull private String departmentId;
-    //    @Type( type = "json" )
-//    @Column( columnDefinition = "json" )
-//    @NonNull private List<Lesson> lessons;
-    @ManyToMany(mappedBy = "enrolledStudents")
+    @ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(
+            name = "student_enrollments",
+            joinColumns = @JoinColumn(name = "lessonId"),
+            inverseJoinColumns = @JoinColumn(name = "idStudent")
+    )
+    @JsonIgnoreProperties("enrolledStudents")
     private Set<Lesson> lessons = new HashSet<>();
 
-    @Transient
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "faculty_id", referencedColumnName = "facultyId")
     private Faculty faculty;
-    @Transient
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "department_id", referencedColumnName = "departmentId")
     private Department department;
 
 }

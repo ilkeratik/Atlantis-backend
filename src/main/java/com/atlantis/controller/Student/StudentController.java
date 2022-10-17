@@ -38,7 +38,9 @@ public class StudentController {
     @PostMapping
     public void registerNewStudent( @RequestBody Student student){
         studentService.addNewStudent(student);
+        System.out.println(student.getLessons());
     }
+
 
     @DeleteMapping(path="{studentId}")
     public void deleteStudentById(@PathVariable("studentId") String studentId){

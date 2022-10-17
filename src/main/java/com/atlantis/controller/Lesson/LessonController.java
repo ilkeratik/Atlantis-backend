@@ -1,15 +1,19 @@
 package com.atlantis.controller.Lesson;
 
 
+import com.atlantis.model.MongoTest.TestModel;
 import com.atlantis.model.University.Lesson;
 import com.atlantis.service.University.Lesson.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @RestController
 @RequestMapping("api/v1/lesson")
@@ -22,9 +26,14 @@ public class LessonController {
     }
 
     @GetMapping
-    public Lesson getLesson(@RequestParam(name="lessonId", required = true) String lessonId){
-        return lessonService.getLessonById(lessonId).orElseThrow(()->
-                new IllegalStateException("Lesson does not exist"));
+    public List<Lesson> getLesson(@RequestParam(name="lessonId") Optional<String> lessonId){
+        if(lessonId.isPresent()){
+            return List.of(lessonService.getLessonById(lessonId.get()).get());
+        }
+        else{
+            return lessonService.getLessons();
+        }
+
     }
 
     @PostMapping

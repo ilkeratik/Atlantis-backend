@@ -3,22 +3,21 @@ package com.atlantis.model.Teacher;
 import com.atlantis.model.University.Department;
 import com.atlantis.model.University.Faculty;
 import com.atlantis.model.University.Lesson;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
@@ -41,12 +40,22 @@ public class Teacher implements Serializable {
 //    @Type( type = "json" )
 //    @Column( columnDefinition = "json" )
 
-    @ManyToMany(mappedBy = "enrolledTeachers")
+    @ManyToMany
+    @JoinTable(
+            name = "teacher_enrollments",
+            joinColumns = @JoinColumn(name = "lessonId"),
+            inverseJoinColumns = @JoinColumn(name = "idTeacher")
+    )
+    @JsonIgnoreProperties("enrolledTeachers")
     private Set<Lesson> lessons = new HashSet<>();
 
     //private List<Lesson> lessons;
     @NonNull private String role;
 
-    @Transient private Faculty faculty;
-    @Transient private Department department;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "faculty_id", referencedColumnName = "facultyId")
+    private Faculty faculty;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "department_id", referencedColumnName = "departmentId")
+    private Department department;
 }

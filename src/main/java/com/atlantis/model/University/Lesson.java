@@ -1,19 +1,18 @@
 package com.atlantis.model.University;
 
-import com.atlantis.jsonMapping.LessonDeserializer;
 import com.atlantis.model.Activity.Activity;
 import com.atlantis.model.Student.Student;
 import com.atlantis.model.Teacher.Teacher;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -29,23 +28,22 @@ public class Lesson {
     private Date year;
     private String term;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "activityId")
     private Set<Activity> activities = new HashSet<>();
-    @ManyToMany
+
+
+//    @JsonIgnoreProperties("lessons")
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Student.class)
     @JoinTable(
             name = "student_enrollments",
-            joinColumns = @JoinColumn(name = "lessonId"),
-            inverseJoinColumns = @JoinColumn(name = "idStudent")
+            joinColumns = @JoinColumn(name = "idStudent"),
+            inverseJoinColumns = @JoinColumn(name = "lessonId")
     )
     private Set<Student> enrolledStudents = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "teacher_enrollments",
-            joinColumns = @JoinColumn(name = "lessonId"),
-            inverseJoinColumns = @JoinColumn(name = "idTeacher")
-    )
+
+    @JsonIgnoreProperties("lessons")
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "lessons", targetEntity = Teacher.class)
     private Set<Teacher> enrolledTeachers = new HashSet<>();
 
     public Lesson(@NonNull String lessonId, @NonNull String lessonName, Date year, String term) {

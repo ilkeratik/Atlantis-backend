@@ -1,5 +1,6 @@
 package com.atlantis.jsonMapping;
 
+import com.atlantis.model.Student.Student;
 import com.atlantis.model.University.Lesson;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -31,7 +32,7 @@ public class LessonDeserializer extends JsonDeserializer<Lesson> {
             throw new RuntimeException(e);
         }
         String term = jsonNode.get("term").asText();
-
+        
         return new Lesson(id, name, year,term);
     }
 }

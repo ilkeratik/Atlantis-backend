@@ -2,6 +2,7 @@ package com.atlantis.service.Entry;
 
 import com.atlantis.model.Entry.Entry;
 import com.atlantis.model.Entry.EntryDetails;
+import com.atlantis.model.Tag.Tag;
 import com.atlantis.repository.Entry.EntryDetailsRepository;
 import com.atlantis.repository.Entry.EntryRepository;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class EntryService {
@@ -53,7 +55,7 @@ public class EntryService {
     public void updateEntry(String entryId, Optional<String> entryTitle,
                             Optional<String> entryParent,
                             Optional<String> entryType,
-                            Optional<String[]> entryTags,
+                            Optional<Set<Tag>> entryTags,
                             Optional<String> entryCategory,
                             Optional<String> entryContent) {
 

@@ -4,6 +4,7 @@ import com.atlantis.model.University.Department;
 import com.atlantis.service.University.Department.DepartmentService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,6 +16,9 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
     @GetMapping
+    public List<Department> getAllDepartments(){
+        return departmentService.getDepartment();
+    }
     public Department getDepartment(@RequestParam(name = "departmentId", required = true) String departmentId){
         return departmentService.getDepartmentById(departmentId).orElseThrow(()->
                 new IllegalStateException("Department does not exist"));

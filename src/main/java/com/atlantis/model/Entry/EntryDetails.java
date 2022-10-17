@@ -1,10 +1,10 @@
 package com.atlantis.model.Entry;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.atlantis.model.Tag.Tag;
 import lombok.*;
 import org.hibernate.annotations.Type;
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -22,7 +22,9 @@ public class EntryDetails {
     private Entry entry;
 
     @NonNull private Integer replyCount;
-    private String[] entryTags;
+
+    @OneToMany
+    private Set<Tag> entryTags;
     private String entryCategory;
     @Column(name="entryContent")
     @Type(type="text")
